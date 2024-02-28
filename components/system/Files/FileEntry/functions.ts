@@ -75,13 +75,15 @@ type VideoElementWithSeek = HTMLVideoElement & {
 };
 
 export const isExistingFile = (
-  { birthtimeMs, ctimeMs }: Stats = {} as Stats
-): boolean => Boolean(birthtimeMs && birthtimeMs === ctimeMs);
+  { birthtime, ctime }: Stats = {} as Stats
+): boolean => Boolean(birthtime && birthtime === ctime);
 
 export const getModifiedTime = (path: string, stats: FileStat): number => {
-  const { mtimeMs } = stats;
+  const { mtime } = stats;
 
-  return isExistingFile(stats) ? get9pModifiedTime(path) || mtimeMs : mtimeMs;
+  return isExistingFile(stats)
+    ? get9pModifiedTime(path) || mtime.getTime()
+    : mtime.getTime();
 };
 
 export const getIconFromIni = (
